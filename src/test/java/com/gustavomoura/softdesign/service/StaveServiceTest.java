@@ -108,13 +108,18 @@ class StaveServiceTest {
                 .thenReturn(Optional.of(stave));
 
         when(repository.save(any()))
-                .thenReturn(staveData);
+                .thenAnswer(invocation -> {
+                    StaveEntity entity = invocation.getArgument(0);
+                    entity.setResult(stave.getResult());
+
+                    return entity;
+                });
 
         var result = service.updateStave(staveId, staveData);
 
         assertEquals(result.getId(), staveId);
         assertEquals(result.getDescription(), stave.getDescription());
-        assertEquals(result.getResult(), stave.getResult());
+        assertEquals(result.getResult(), 70);
         assertEquals(result.getCreatedAt(), stave.getCreatedAt());
         assertTrue(result.isStaveApproved());
         assertTrue(result.isStaveVoted());
