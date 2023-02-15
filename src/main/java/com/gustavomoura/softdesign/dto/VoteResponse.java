@@ -14,6 +14,5 @@ public class VoteResponse {
     private String id;
     private String staveId;
     private String associateId;
-    private String cpf;
     private String hisVote;
 }
