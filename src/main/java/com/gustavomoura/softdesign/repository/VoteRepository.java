@@ -15,4 +15,6 @@ public interface VoteRepository extends CrudRepository<VoteEntity, String> {
     Long count(@Param("staveId") String staveId, @Param("hisVote") boolean hisVote);
 
     List<VoteEntity> findAllByStaveId(String staveId);
+
+    boolean existsByStaveIdAndAssociateId(String staveId, String associateId);
 }

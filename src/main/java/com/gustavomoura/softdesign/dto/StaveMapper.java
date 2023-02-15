@@ -13,6 +13,9 @@ public class StaveMapper {
         return StaveResponse.builder()
                 .id(stave.getId())
                 .description(stave.getDescription())
+                .result(stave.getResult())
+                .staveVoted(stave.isStaveVoted() ? "Sim" : "Não")
+                .staveApproved(stave.isStaveApproved() ? "Sim" : "Não")
                 .createdAt(stave.getCreatedAt())
                 .build();
     }

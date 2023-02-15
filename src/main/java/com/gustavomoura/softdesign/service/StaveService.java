@@ -68,7 +68,7 @@ public class StaveService {
         var staveToUpdate = findStaveById(staveId);
 
         staveToUpdate.setStaveVoted(stave.isStaveVoted());
-        staveToUpdate.setResult(stave.getResult());
+        staveToUpdate.setResult(staveToUpdate.getResult() + stave.getResult());
         staveToUpdate.setStaveApproved(stave.isStaveApproved());
 
         log.info("updating a stave with id: " + staveId);

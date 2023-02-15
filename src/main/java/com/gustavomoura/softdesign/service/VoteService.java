@@ -46,13 +46,17 @@ public class VoteService {
                             .build();
                     var associate = associateService.createAssociate(associateEntity);
 
-                    voteCount.getAndSet(voteCount.get() + 1);
-                    var voteToCreate = VoteEntity.builder()
-                            .staveId(staveId)
-                            .associateId(associate.getId())
-                            .hisVote(vote.getHisVote().equalsIgnoreCase("SIM"))
-                            .build();
-                    createVote(voteToCreate);
+                    var voteValidated = validateVote(staveId, associate);
+
+                    if (!voteValidated) {
+                        voteCount.getAndSet(voteCount.get() + 1);
+                        var voteToCreate = VoteEntity.builder()
+                                .staveId(staveId)
+                                .associateId(associate.getId())
+                                .hisVote(vote.getHisVote().equalsIgnoreCase("SIM"))
+                                .build();
+                        createVote(voteToCreate);
+                    }
                 });
 
         var verifyIfStaveHasApproved = repository.count(staveId, true) >= repository.count(staveId, false);
@@ -63,6 +67,17 @@ public class VoteService {
                 .build();
 
         staveService.updateStave(staveId, staveToUpdate);
+    }
+
+    /**
+     * this method validates if the associate has already voted on this stave
+     * @param associate the associate entity
+     * @return return true if the associate has already voted
+     */
+    private boolean validateVote(String staveId, AssociateEntity associate) {
+        log.info("Validating a vote with stave id: " + staveId);
+
+        return repository.existsByStaveIdAndAssociateId(staveId, associate.getId());
     }
 
     /**
